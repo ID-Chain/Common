@@ -12,9 +12,12 @@ npm run docs:build
 cd docs/.vuepress/dist
 
 git init
+git config user.email "traka.konstantinagmail.com"
+git config user.name "Deployment Bot"
 git add -A
-git commit -m 'Publish New Version of Documentation'
+git commit --allow-empty -m 'Publish New Version of Documentation'
 
-git push -f git@github.com:ID-Chain/ID-Chain.github.io.git master
+# Push quietly to prevent showing the token in log
+git push -qf https://${GITHUB_TOKEN}@github.com:ID-Chain/ID-Chain.github.io.git master
 
 cd -
