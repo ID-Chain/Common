@@ -18,6 +18,6 @@ git add -A
 git commit --allow-empty -m 'Publish New Version of Documentation'
 
 # Push quietly to prevent showing the token in log
-git push -qf https://${GITHUB_TOKEN}@github.com:ID-Chain/ID-Chain.github.io.git master
+git push -qf https://${GITHUB_TOKEN}@github.com/ID-Chain/ID-Chain.github.io.git master
 
 cd -
