@@ -3,6 +3,8 @@
 # abort on errors
 set -e
 
+npm i
+
 # build
 npm run docs:build
 
