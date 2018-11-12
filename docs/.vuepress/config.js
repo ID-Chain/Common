@@ -20,7 +20,7 @@ module.exports = {
       }
     ],
     ["link", { rel: "manifest", href: "/manifest.json" }],
-    ["meta", { name: "theme-color", content: "#3eaf7c" }],
+    ["meta", { name: "theme-color", content: "#2a5fb7" }],
     ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
     [
       "meta",
@@ -35,7 +35,7 @@ module.exports = {
       {
         rel: "mask-icon",
         href: "/icons/safari-pinned-tab.svg",
-        color: "#3eaf7c"
+        color: "#2a5fb7"
       }
     ],
     [
@@ -64,6 +64,7 @@ module.exports = {
       }
     ]
   ],
+  ga: 'UA-129020720-1',
   serviceWorker: true,
   markdown: {
     // options for markdown-it-anchor
