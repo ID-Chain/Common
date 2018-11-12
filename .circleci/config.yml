@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  publish:
+  build:
     docker:
       - image: circleci/node:10.13.0
       
@@ -27,7 +27,7 @@ workflows:
   version: 2
   publish:
     jobs:
-      - publish:
+      - build:
           filters:
             branches:
               only: master
