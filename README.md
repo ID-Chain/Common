@@ -1,4 +1,4 @@
-<img src="https://id-chain.github.io/square-logo300x300.png" align="left" style="max-height: 200px; float: left; margin-right: 30px;" />
+<img src="https://id-chain.github.io/square-logo300x300.png" align="left" height="120px" style="margin-right: 30px;" />
 
 # IdentityChain Commons
 **Documentation Build </br>**
