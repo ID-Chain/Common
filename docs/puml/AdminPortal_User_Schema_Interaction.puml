@@ -1,0 +1,120 @@
+@startuml
+
+
+title
+
+Schema interaction pages inside the Admin Portal
+
+__NOTE__: The word <i>Schemas</i> refers to High-level Schemas.
+
+- Admin user (Government or Chamber of Commerce) gets a list of own schemas.
+- Admin user sees the full details of a stored schema.
+- Admin user creates a new Schema, and 1 new credential definition for that schema.
+- Admin user updates an already-existing Schema, and creates 1 new credential definition from the updated schema.
+- Admin user revokes a schema (which actually revokes the credential definition registry on the ledger).
+- Frontdesk user (Government or Chamber of Commerce) asks to see the available schemas during a Credential Offer.
+
+end title
+
+box "Admin Portal Frontend" #LightBlue
+actor "Admin (Gov/CoC)" as A
+
+participant "Admin UI" as UI
+endbox
+
+box "Admin Portal Backend" #LightBlue
+
+participant "Node API" as NODE
+
+database "Mongo DB" as DB
+
+endbox
+
+participant "Schema Compiler" as S
+
+collections "Ledger" as L
+
+participant "Frontdesk backend" as B
+actor "Frontdesk (Gov/CoC)" as F
+
+
+=== List Schemas ==
+
+A -> UI: Requests to see user-owned stored schemas (ListSchemas page)
+UI -> NODE: Send GET Schemas
+NODE -> DB: Query stored schemas for selected user
+DB -> NODE: Response with stored schemas
+NODE -> UI: Format response (SELECT only Schema name+Version+Id)
+UI -> A: Display&Update webpage
+
+=== Show Schema Details==
+
+A -> UI: Selects (clicks) Schema from ListSchemas page
+UI -> NODE: Send GET Schema with particular Id
+NODE -> DB: Query schema with Id
+DB -> NODE: Response with asked schema
+NODE -> UI: SELECT Schema: name,version,parent,attr-names,attr-types,stored low-level schema, IsRevokable, CredDefID
+UI -> A: Display queried fields, UpdateSchema button, IsRevokable CheckBox
+
+
+=== Create Schema ==
+
+A -> UI: Fills in & Submits a Schema form (name,version,parent,attrs,IsRevokable,Status)
+UI -> NODE: Send POST Schema
+NODE -> S: Validate & Compile Schema
+S -> NODE: Send generated low-level schema
+activate NODE
+NODE -> NODE: Create cred-def from low-level schema
+NODE -> L: Publish low-level schema
+NODE -> L: Publish cred-def
+NODE -> DB: Store new schema details together with generated low schema, new cred-def id
+deactivate NODE
+NODE -> UI: Return new schema id
+UI -> A: Success Dialog & Redirect to ShowSchemaDetails page of new schema
+
+=== Update Schema ==
+
+A -> UI: Clicks Update-Schema button from ListSchemas or SchemaDetails page
+UI -> NODE: Send GET Schema with particular Id
+NODE -> DB: Query schema with Id
+DB -> NODE: Response with asked schema
+NODE -> UI: SELECT Schema: name,version,parent,attr-names,attr-types,stored low-level schema, IsRevokable, CredDefID
+UI -> A: Populates CreateSchema page form with queried fields
+ref over A
+  Continues as CreateSchema flow
+end ref
+
+=== Revoke Schema&Credential page ==
+
+A -> UI: Clicks Revoke-Schema button on SchemaDetails page (if IsRevokable)
+UI -> NODE: Send POST revoke/schema-id
+NODE -> DB: Query the cred-def id of that schema-id
+DB -> NODE: Response cred-def-id
+activate NODE
+NODE -> L: Revoke cred-def id
+NODE -> DB: Modifies Status=Deprecated of stored shema
+deactivate NODE
+NODE -> UI: Returns 200 OK
+UI -> A: Show Success dialog
+
+=== Credential Offer  ==
+
+F -> B: Navigates to the OfferCredential page
+B -> NODE: Send GET available schemas
+NODE -> DB: Query schemas with Status active, i.e. non-deprecated
+DB -> NODE: Response filtered list of schemas
+NODE -> B: Forward response
+B -> F: Show OfferCredential page form with drop-down selection of active schemas
+
+footer
+
+Pre-conditions:
+
+- Admin-user has been authorized to access the AdminUI (holding a JWT)
+- Frontdesk is authorized to access the stored schemas and cred.defs (not currently provided)
+
+
+end footer
+
+
+@enduml

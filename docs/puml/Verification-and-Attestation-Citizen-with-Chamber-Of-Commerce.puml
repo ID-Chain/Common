@@ -1,0 +1,136 @@
+@startuml
+skinparam ParticipantPadding 50
+skinparam BoxPadding 40
+
+title
+
+Identity Chain Proof Verification before Attestation Flow
+
+# Citizen registers a new Company on Chamber of Commerce (KvK)
+# Citizen is onboarded with Chamber of Commerce (KvK)
+# Chamber of Commerce (KvK) requests passport attributes proof signed by the Government
+# Citizen proofs KvK and gets Company/Organization credentials
+
+end title
+
+box "Mobile App Agent " #LightBlue
+actor "User (Citizen) " as U
+participant "Mobile App" as UAPP
+endbox
+
+participant "Firebase Cloud Messaging " as FCM
+
+box "Cloud Agent " #LightBlue
+participant "Back-End" as CA
+endbox
+
+box "Chamber Of Commerce (KvK) Agent " #LightBlue
+participant "Chamber Of Commerce WebApp " as CCAPP
+participant "Chamber of Commerce Node API " as CCNODE
+endbox
+
+participant "Ledger" as L
+
+=== Company Registration & Onboarding ==
+
+U -> CCAPP: Fill new company registration form
+CCAPP -> CCNODE: Request new <b> Connection Offer
+CCNODE -> CCAPP: Response with <b> Connection Offer Information
+CCAPP -> CCAPP: Generate QR Code from Connection Offer Information
+CCAPP -> U: Display QR Code with <b> Connection Offer
+
+U -> UAPP: Open Mobile Application
+UAPP -> CCAPP: Scan <b> QR Code</b>: { \nTA_DID,\nNONCE (Linked to Citizen),\nMOBILE METADATA (Name, logo, description) \n}
+UAPP -> L: Read ledger: <b>Endpoint Host Address & Verification Key
+UAPP -> UAPP: <b>Generate DID</b> (Citizen -> KvK)
+UAPP -> CCNODE: Send <b>Connection Request</b>
+CCNODE -> CCNODE: <b>Generate DID</b> (KvK -> Citizen)
+CCNODE -> CCNODE: Creates <b>Pairwise</b> in wallet
+CCNODE -> CA: Send <b>Connection Response</b>
+CA -> FCM: Forward <b>Connection Response</b>
+activate FCM
+FCM -> UAPP: Push Notification with <b> Connection Response </b>
+deactivate FCM
+UAPP -> UAPP: Creates <b>Pairwise</b> in wallet
+UAPP -> CCNODE: <b>Connection Acknowledge</b>
+note over U : REFINE THIS POINT: \nUSER SHOULD GET SOME FEEDBACK?
+U -> CCAPP: Check if connection was successful linked
+
+=== Proof Request  & Verification ==
+
+note over CCNODE : Automatically generate Proof Request \nfor new Connections linked to new Companies \n(Until now marked as NOT VERIFIED)
+note over CCNODE : REFINE THIS POINT: \nShould we allow some triggering from Admin UI?
+
+CCNODE -> CCNODE: Generate Proof Request
+CCNODE -> CA: Send <b> Proof Request</b>
+CA -> FCM: Forward <b> Proof Request</b>
+activate FCM
+FCM -> UAPP: Push Notification with <b> Proof Request</b> : { \nName (disclosed),\nSurname (disclosed), BSN? (disclosed), \nOver 18 years all (ZKRP), \n (All attributes should be signed by the Governerment) \n}
+deactivate FCM
+
+activate UAPP
+UAPP -> UAPP: Check if the user can generate Requested Proof
+note over UAPP : REFINE THIS POINT: \nHow do we handle if not, how the user is notified?
+UAPP -> L: Get Passport Schema
+UAPP -> L: Get Government Passport Credential Definition
+UAPP -> U: Notify and display the requested data. \n <b>Do you agree on sharing?
+U -> UAPP: <b>Accepts</b> sharing the credentials with Chamber Of Commerce
+UAPP -> UAPP: Generate Proof
+UAPP -> CCNODE: Send <b>Proof
+deactivate UAPP
+
+CCNODE -> CCNODE: Verifies if proof is valid?
+CCNODE -> CCNODE: Store proof together with pairwise
+CCNODE -> CCNODE: Mark new registered company\n as <b>Verified & link user to company
+
+=== Attestation ==
+
+U -> CCAPP: Request company credentials
+CCAPP -> CCNODE: Generate Credential Offer for given user/DID/citizen linked to company
+CCNODE -> CA: Send Company Credential Offer
+CA -> FCM: Forward <b> Credential Offer</b>
+activate FCM
+FCM -> UAPP: Push Notification with <b> Credential Offer</b> : Company Information
+deactivate FCM
+UAPP -> UAPP: Generate <b>Credential Request
+UAPP -> CCNODE: Send <b>Credential Request
+CCNODE -> CCNODE: Check if company is already verified and owner matches request?
+CCNODE -> CCNODE: Generate <b> Company Credentials
+CCNODE -> CA: Send <b> Company Credentials
+CA -> FCM: Forward <b> Company Credentials</b>
+activate FCM
+FCM -> UAPP: Push Notification with <b> Company Credentials</b>
+deactivate FCM
+
+UAPP -> U: Show received company credentials \n <b>Do you accept this credentials?
+U -> UAPP: <b>Accept</b> credentials
+UAPP -> UAPP: <b>Store credentials in Wallet
+
+footer
+
+Pre-conditions:
+
+# Citizen
+- Was already onboarded with Government
+- Holds passport credentials signed by the Government in his Mobile App Wallet
+
+# Pool
+- Using default test genesis file
+- Government onboarded as Trust Anchor by Default Steward
+- Cloud agent onboarded as User by Default Steward
+
+# Cloud Agent
+- Registered with Firebase Cloud Messaging (FCM)
+
+# Mobile App
+- Knowledge about Cloud Agent
+- Registered to Cloud Agent (FCM)
+- Connected to Pool (Sent by Cloud Agent)
+- Generated Wallet
+
+# Government Trust Anchor
+- Created Schema & Credential Definition for Passport
+
+end footer
+
+@enduml

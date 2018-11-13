@@ -1,0 +1,113 @@
+@startuml
+skinparam ParticipantPadding 50
+skinparam BoxPadding 40
+
+title
+
+Identity Chain Onboarding & Attesting Flow
+
+# Citizen is onboarded with Government
+# Citizen gets Attested with Passport
+
+IMPORTANT:
+__Citizen is physically present in the Government Office__
+
+end title
+
+box "Mobile App Agent " #LightBlue
+actor "User (Citizen) " as U
+participant "Mobile App" as UAPP
+endbox
+
+participant "Firebase Cloud Messaging " as FCM
+
+box "Cloud Agent " #LightBlue
+participant "Back-End" as CA
+endbox
+
+box "Government Agent " #LightBlue
+actor "Officer" as G
+participant "Government Internal WebApp " as GAPP
+participant "Government Node API " as GNODE
+endbox
+
+participant "Ledger" as L
+
+=== Passport Verification ==
+
+G -> U: Request the citizen's Passport
+G -> GAPP: Enter citizens BSN
+G -> U: Check if citizen info is correct
+
+=== Onboarding ==
+
+G -> GAPP: Request <b> QR Code</b> for onboarding
+GAPP -> GNODE: Request <b> Connection Offer</b>
+GNODE -> GAPP: Generate <b> Connection Offer</b>
+GAPP -> GAPP: Generate <b> QR Code from Connection Offer</b> in UI
+U -> UAPP: Open QR Code Scanner feature
+UAPP -> GAPP: Scan <b> QR Code</b>: { \nTA_DID,\n GOV_ENDPOINT,\n GOV_DID,\n GOV_VK,\nNONCE (Linked to Citizen),\nMOBILE METADATA (Name, logo, description) \n}
+UAPP -> UAPP: <b>Generate DID</b> (Citizen -> Gov)
+UAPP -> GNODE: Send <b>Connection Request</b>
+GNODE -> GNODE: <b>Generate DID</b> (Gov -> Citizen)
+GNODE -> GNODE: Creates <b>Pairwise</b> in wallet
+GNODE -> CA: Send <b>Connection Response</b>
+CA -> FCM: Forward <b>Connection Response</b>
+activate FCM
+FCM -> UAPP: Push Notification to notify/receive <b> Connection Response </b>
+deactivate FCM
+UAPP -> GNODE: <b>Connection Acknowledge</b>
+UAPP -> UAPP: Creates <b>Pairwise</b> in wallet
+G -> GAPP: Check if connection was successful
+
+=== Attestation ==
+
+
+GAPP -> GNODE: Get available Credential Definitions
+G -> GAPP: Selects from Dropdown list a <b> Credential Offer
+note over GAPP : Credential values should be map to schema attributes
+GAPP -> GNODE: Generate and send <b> Credential Offer </b> to Citizen \n Maybe also send credential values mapped
+GNODE -> CA: Send <b> Credential Offer </b>
+CA -> FCM: Forward <b> Credential Offer </b>
+activate FCM
+FCM -> UAPP: Push Notification with <b> Credential Offer </b>
+deactivate FCM
+UAPP -> L : Get <b>Schema</b>
+UAPP -> L : Get <b>Credential Definition</b>
+note over UAPP : App should use the same Master Secret Key \n for the automatic generation of credential request
+UAPP -> GNODE: <b>AUTOMATICALLY </b> Generates & Sends<b> Credential Request</b>
+GNODE -> CA: Sends <b>Credentials</b>
+CA -> FCM: Forwards <b>Credentials</b>
+activate FCM
+FCM -> UAPP: Push Notification with <b> Credentials</b>
+deactivate FCM
+UAPP -> U: Show Notification to <b> Accept OR Reject Credentials  </b>
+
+UAPP -> U: Show received Passport credentials \n <b>Do you accept this credentials?
+U -> UAPP: <b>Accept</b> credentials
+UAPP -> UAPP: <b>Store credentials in Wallet
+
+footer
+
+Pre-conditions:
+
+# Pool
+- Using default test genesis file
+- Government onboarded as Trust Anchor by Default Steward
+- Cloud agent onboarded as User by Default Steward
+
+# Cloud Agent
+- Registered with Firebase Cloud Messaging (FCM)
+
+# Mobile App
+- Knowledge about Cloud Agent
+- Registered to Cloud Agent (FCM)
+- Connected to Pool (Sent by Cloud Agent)
+- Generated Wallet
+
+# Government Trust Anchor
+- Created Schema & Credential Definition for Passport
+
+end footer
+
+@enduml
