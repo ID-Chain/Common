@@ -1,3 +1,5 @@
+var appDir = process.env.PWD;
+
 module.exports = {
   title: "IdentityChain",
   head: [
@@ -72,6 +74,7 @@ module.exports = {
     // options for markdown-it-toc
     toc: { includeLevel: [1, 2, 3, 4] },
     config: md => {
+      md.use(require('markdown-it-include', appDir));
       md.use(require("markdown-it-plantuml"));
     }
   },

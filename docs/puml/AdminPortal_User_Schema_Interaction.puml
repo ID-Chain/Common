@@ -1,5 +1,5 @@
+<span>
 @startuml
-
 
 title
 
@@ -118,3 +118,4 @@ end footer
 
 
 @enduml
+</span>

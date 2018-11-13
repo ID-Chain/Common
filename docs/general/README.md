@@ -34,6 +34,7 @@
 
 #### Diagram flows
 
-![](../puml/Onboarding-Attestation-Citizen-by-Government.puml)
+!!!include(docs/puml/Onboarding-Attestation-Citizen-by-Government.puml)!!!
 
-![](../puml/Verification-and-Attestation-Citizen-with-Chamber-Of-Commerce.puml)
+!!!include(docs/puml/Verification-and-Attestation-Citizen-with-Chamber-Of-Commerce.puml)!!!
+

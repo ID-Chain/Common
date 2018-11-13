@@ -10,6 +10,7 @@ footer: IdentityChain - 2018
 # Hello World :smile:
 
 @startuml
+
 strict digraph meme {
   exists [color=blue]
   authenticate [color=blue]
@@ -25,6 +26,7 @@ strict digraph meme {
   destroy -> UserDestroyed
   get -> require
 }
+
 @enduml
 
 ```javascript
