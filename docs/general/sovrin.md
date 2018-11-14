@@ -1,4 +1,4 @@
-# Sovrin & Hyperledger Indy
+# Sovrin and Hyperledger Indy
 
 In the digital age there are numerous projects trying to address the needs of digital identity. The survey made in 2017 by ING DLT research team counts up about 50 different systems. First quick assessment done by the researches showed that only 9 of them possess properties required for Self Sovereign Identity. The team had performed further comprehensive analysis on every property of each system from the short list resulting in the selection of three candidates, Sovrin, uPort and IRMA. The final verdict is that each product had own unique properties, but at same time no product addressed all requirements. For example, Sovrin was unique in supporting digital credential revocations, but it was unclear how Sovrin might conduct consent and withdrawal policies on provided claims.
 The final selection of the product was done on the basis of the perception of the size of the supporting community, and Sovrin had won.   
@@ -39,7 +39,7 @@ The storage in Sovrin is provided by two distinct technologies, the ledger (bloc
 
 The ledger is held and run by Sovrin Trust Framework, where provisioning of nodes is facilitated by the organisations which govern the network. The ledger in Sovrin is designed for operations which make only a sense for digital identity, hence no cryptocurrency is supported.
 
-_Yet the ledger shows a lot of similarities to other blockchain types. For example, the integrity of records is guaranteed by Merkle tree , the deterministic consensus variates slightly from  RBFT. At same time Sovrin ledger uses advanced signatures,  _
+_Yet the ledger shows a lot of similarities to other blockchain types. For example, the integrity of records is guaranteed by Merkle tree , the deterministic consensus variates slightly from  RBFT. At same time Sovrin ledger uses shorter signatures and different synchronisation mechanism_
 
 What makes Sovrin distinct from other similar systems or systems based on blockchain  is capability for multiple ledgers serving various non-intersecting roles.
 
@@ -63,9 +63,6 @@ Most unique property of Sovrin is the support for revocations. Every claim issue
 
 
 Sovrin is a specific instantiation of [Indy project](https://github.com/hyperledger/indy-node) , using a governance model described in the [Sovrin Provisional Trust Framework](http://bit.ly/svrn-ptrustfw). The  programming interface [Indy SDK](https://github.com/hyperledger/indy-sdk) has binding to several popular programming languages and platforms.
-
-
-
 
 
 The original source code of Sovrin has been gifted to the Sovrin Foundation by Evernym Corporation.
