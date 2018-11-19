@@ -19,6 +19,10 @@ To summarise the advantages of Sovrin system which undoubtedly make it good cand
 - is opened for the usage outside Sovrin Framework
 - is portable with other DID based systems
 
+Sovrin is a specific instantiation of [Indy project](https://github.com/hyperledger/indy-node) , using a governance model described in the [Sovrin Provisional Trust Framework](http://bit.ly/svrn-ptrustfw). The  programming interface [Indy SDK](https://github.com/hyperledger/indy-sdk) has binding to several popular programming languages and platforms.
+
+The original source code of Sovrin has been gifted to the Sovrin Foundation by Evernym Corporation.
+
 
 ## Features
 
@@ -68,15 +72,9 @@ One of unique properties of Sovrin is the support for revocations. Every claim i
 
 Another important property of Sovrin is that it makes use of Zero Knowledge Proof technique. This cryptographic method uses very complex mathematics to demonstrate an attribute of an identity to a verifier without giving out exact value of the attribute. One can see that this technique works well when verifier needs to compare a numeric value against a constant, for example, to check if an age of a person fits to age restriction level. In this case the actual age is never disclosed to the verifier, yet the restriction level will be checked correctly.
 
-
+## Conclusion
 
 Sovrin is open-source product created by Evernym. The authors define Sovrin platform as the toolset of technologies opened for extension, from which one can build a customised version of identity management solution. Having said this, it becomes obvious why this product was chosen as the best candidate for the scope of this project.
-
-
-Sovrin is a specific instantiation of [Indy project](https://github.com/hyperledger/indy-node) , using a governance model described in the [Sovrin Provisional Trust Framework](http://bit.ly/svrn-ptrustfw). The  programming interface [Indy SDK](https://github.com/hyperledger/indy-sdk) has binding to several popular programming languages and platforms.
-
-
-The original source code of Sovrin has been gifted to the Sovrin Foundation by Evernym Corporation.
 
 
 Sovrin is a global utility for self-sovereign identity--that is, an identity that nobody controls except its natural owner, that can't be taken away or stripped of its privacy or manipulated through unreasonable terms of service. Imagine if you could bring your identity with you to all your digital interactions, instead of creating new logins for every online bank, every mobile app, every social network, every email client, every government agency, every shopping site...
