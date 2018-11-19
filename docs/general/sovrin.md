@@ -3,6 +3,7 @@
 In the digital age there are numerous projects trying to address the needs of digital identity. The survey made in 2017 by ING DLT research team counts up about 50 different systems. First quick assessment done by the researches showed that only 9 of them possess properties required for Self Sovereign Identity. The team had performed further comprehensive analysis on every property of each system from the short list resulting in the selection of three candidates, Sovrin, uPort and IRMA. The final verdict is that each product had own unique properties, but at same time no product addressed all requirements. For example, Sovrin was unique in supporting digital credential revocations, but it was unclear how Sovrin might conduct consent and withdrawal policies on provided claims.
 The final selection of the product was done on the basis of the perception of the size of the supporting community, and Sovrin had won.   
 
+## Summary
 
 To summarise the advantages of Sovrin system which undoubtedly make it good candidate to implement Self Sovereign Identity:
 
@@ -19,7 +20,7 @@ To summarise the advantages of Sovrin system which undoubtedly make it good cand
 - is portable with other DID based systems
 
 
-
+## Features
 
 In the next part of the document we describe main features of the Sovrin platform with the stress on its unique properties. Many conceptual details of the design of Sovrin system can be grasped from Use Case diagrams, so we strongly recommend to get familiar with them too.
 
@@ -58,17 +59,19 @@ The wallet contains objects of few types:
 
 Most notable property of Sovrin is confidentiality, and it comes with wallets. None of items from a wallet are  copied to public ledger, therefore sensitive information remains private to an owner of the wallet. At same time wallet becomes self-served identity object, making the platform matching important principles of Self Sovereign Identity.
 
+Sovrin has also a notion of attributes' schema, namely, the collection of names for which a given issuer has to populate
+all values. Schemas are published to the ledger, where they acquire unique name, version as well as DID of the publisher. Sovrin's schemas are simple, and attributes have no types, for example, numeric value can be assigned to name, or numeric value can fall outside of supported range of values. The API functions cannot verify whether correct types of values assigned to attributes, so the verification process is not entirely reliable. The team from CWI, Amsterdam, has added the high- level schema feature to the system. High-level schemas are created in semantic context where attributes have data types, and where schemas inherit properties from "parent" schemas.
+
+The proved attributes are always merged into a *credential*, the digital equivalent of traditional credential document. Various institutions issue credentials with different, possibly non-intersecting, combinations of attributes. Sovrin supports the combinations of these attributes be taken from different credentials to merge into one proof. In other words attributes from any given credential can be partially disclosed and combined with attributes from other credentials to form a final digital proof. On the other side, a verifier can demand that given attribute has to be delivered from given schema only (recall that all schemas are publicly available in the ledger), so that additional logical level of trust applies to the proof.
+
 One of unique properties of Sovrin is the support for revocations. Every claim issued by Sovrin has revocation Id, which can be used by the issuer to mark this claim as no more valid. One can easily see from the information in previous paragraphs that the claim is stored in a wallet of the owner of the claim, therefore it can not be reached and/or modified by issuer without an action taken by that owner. While it is true, the revocation is still facilitated in Sovrin: the party which verifies the proof can check at any moment if the proof is still valid. The information on the validity of a claim is provided by public record in the ledger. This record gets written to the blockchain each time any given claim is revoked. Sovrin uses advanced cryptography for the revocation mechanism. In particular, validity records do not show any significant information about which claims are revoked. Instead, the proof of the claim contains data which uniquely identifies whether claim belongs to the collection of revoked ones.  
 
-Another important property of Sovrin is that it makes use of Zero Knowledge Proof technique. This cryptographic method uses very complex mathematics to demonstrate an attribute of an identity to a verifier without giving out exact value of the attribute. One can see that this technique works well when verifier needs to compare a numeric value against a constant, for example, to check if an age of a person fits to age restriction level. In this case the actual age is never disclosed to the verifier, yet the restriction level will be checked corectly.
+Another important property of Sovrin is that it makes use of Zero Knowledge Proof technique. This cryptographic method uses very complex mathematics to demonstrate an attribute of an identity to a verifier without giving out exact value of the attribute. One can see that this technique works well when verifier needs to compare a numeric value against a constant, for example, to check if an age of a person fits to age restriction level. In this case the actual age is never disclosed to the verifier, yet the restriction level will be checked correctly.
 
-The proved attributes are always merged to a *credential*, the digital equivalent of traditional credential document. Various institutions issue credentials with different, possibly non-intersecting, combinations of attributes. Sovrin supports the combinations of these attributes be taken from different credentials to merge into one proof. In other words attributes from any given credential can be partially disclosed and combined with attributes from other credentials to form a final digital proof.
 
-Sovrin has also a notion of attributes' schema, namely, the collection of names for which a given issuer has to populate
-all values. Sovrin's schemas are simple, and attributes have no types, for example, numeric value can be assigned to name, or numeric value can fall outside of supported range of values. The API functions cannot verify whether correct types of values assigned to attributes, so the verification process is not entirely reliable. The team from CWI, Amsterdam, has added the high- level schema feature to the system. High-level schemas are created in semantic context where attributes have data types, and where schemas inherit properties from "parent" schemas.
 
 Sovrin is open-source product created by Evernym. The authors define Sovrin platform as the toolset of technologies opened for extension, from which one can build a customised version of identity management solution. Having said this, it becomes obvious why this product was chosen as the best candidate for the scope of this project.
-  
+
 
 Sovrin is a specific instantiation of [Indy project](https://github.com/hyperledger/indy-node) , using a governance model described in the [Sovrin Provisional Trust Framework](http://bit.ly/svrn-ptrustfw). The  programming interface [Indy SDK](https://github.com/hyperledger/indy-sdk) has binding to several popular programming languages and platforms.
 
