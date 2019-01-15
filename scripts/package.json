@@ -1,0 +1,70 @@
+{
+  "name": "idchain-init",
+  "version": "0.0.1",
+  "description": "IDChain Initialization Scripts",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "eslint .",
+    "precommit": "lint-staged",
+    "init": "node ./generate-fake-citizens-db",
+    "remove:dbs": "node ./remove-dbs"
+  },
+  "author": "IDChain",
+  "license": "",
+  "dependencies": {
+    "chalk-pipe": "^1.2.0",
+    "inquirer": "^5.2.0",
+    "npm": "^6.5.0",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.1.0",
+    "eslint-config-prettier": "^2.4.0",
+    "eslint-config-xo": "^0.20.0",
+    "eslint-plugin-prettier": "^2.2.0",
+    "faker": "^4.1.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0",
+    "prettier": "^1.7.0",
+    "sqlite3": "^4.0.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "xo",
+      "prettier"
+    ],
+    "env": {
+      "node": true
+    },
+    "rules": {
+      "camelCase": "off",
+      "no-eq-null": "off",
+      "eqeqeq": [
+        "error",
+        "always",
+        {
+          "null": "ignore"
+        }
+      ],
+      "prettier/prettier": [
+        "error",
+        {
+          "printWidth": 90
+        }
+      ]
+    },
+    "plugins": [
+      "prettier"
+    ]
+  }
+}
