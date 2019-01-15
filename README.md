@@ -7,18 +7,9 @@
 This repository holds all IdentityChain projects documentation and :whale2: Docker set-up to run our components. Please
 see the sub-README files inside the different folders for more details.
 
-## Publishing the docs
-
-> There is a Circle CI job which will automatically build and publish the documentation (master branch only)
-
-Run the following command to publish manually the documentation side:
- ```bash
-./publish-docs.sh
-```
-
 ## Getting Started
 
-## Documentation
+### Documentation
 
 > Please see [Hyperledger Indy SDK repository] documentation to get familiar with all the concepts used by this project
 
@@ -40,8 +31,20 @@ pool transaction file. This identities were created using seed to make them repr
 * Government
 * Chamber Of Commerce
 
-Please see the sub-README file inside test-pool folder for more details.
+Please see the [test-pool sub-README file] inside test-pool folder for more details.
+
+
+
+## Publishing the docs
+
+> There is a Circle CI job which will automatically build and publish the documentation (master branch only)
+
+Run the following command to publish manually the documentation side:
+ ```bash
+./publish-docs.sh
+```
 
 <!-- References -->
 [Hyperledger Indy SDK repository]:https://github.com/hyperledger/indy-sdk
 [GettingStarted]:https://github.com/hyperledger/indy-sdk/blob/master/README.md
+[test-pool sub-README file]:https://github.com/ID-Chain/Common/tree/master/test-pool

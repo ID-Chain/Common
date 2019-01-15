@@ -3,6 +3,7 @@
 # abort on errors
 set -e
 
+# install npm dependencies
 npm i
 
 # build
@@ -12,7 +13,7 @@ npm run docs:build
 cd docs/.vuepress/dist
 
 git init
-git config user.email "traka.konstantinagmail.com"
+git config user.email "traka.konstantina@gmail.com"
 git config user.name "Deployment Bot"
 git add -A
 git commit --allow-empty -m 'Publish New Version of Documentation'
