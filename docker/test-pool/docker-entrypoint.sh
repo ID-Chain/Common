@@ -77,5 +77,10 @@ EOF
 
 cat /var/lib/indy/${IDC_POOL_NAME}/domain_transactions_genesis
 
+# Copy genesis files to tmp and initiate http server to expose them
+cp /var/lib/indy/${IDC_POOL_NAME}/domain_transactions_genesis /tmp
+cp /var/lib/indy/${IDC_POOL_NAME}/pool_transactions_genesis /tmp
+cd /tmp && nohup python3 -m http.server &
+
 exec gosu indy "$@"
 

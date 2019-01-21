@@ -1,8 +1,15 @@
 # IdentityChain Test Pool Dockerfile
 
-Dockerfile configuration for an indy test-pool. Genesis Transactions and configuration are generated and output during run so the image is reusable.
+Dockerfile configuration for our indy test-pool image. This image is based on the [Getting Started] documentation found in 
+[Hyperledger Indy SDK repository]. We added some NYM transactions into the genesis pool transaction file. This identities (DIDs)
+were created using seeds to make them reproducible and have the role of TRUST_ANCHORS (TA). For our use-case we added 4 TA DIDs for:
 
-> Please notice all commands expect you are inside the test-pool folder of the repository (Where this README files is located)
+* Government
+* Chamber Of Commerce
+* Cloud Agent
+* ING Bank
+
+> Please notice all commands expect you are inside the test-pool folder of the repository (Where this README file is located)
 
 ## Build
 
@@ -37,7 +44,7 @@ Configuration can be provided using environment variables
 the pool nodes will bind to ports 9701-9708 (default is 9700)
 
 ```bash
-docker run -e IDC_POOL_IP=172.16.0.100 idchain/test-pool:<version>
+docker run -e IDC_POOL_IP=172.16.0.100 -p 8000:8000 idchain/test-pool:<version>
 ```
 
 ## Run in the cloud (Reachable from Public IP Address) - Docker Compose
@@ -59,21 +66,16 @@ docker-compose up -d
 
 ## Get generated pool transaction genesis file to be used by any agent willing to connect to it
 
-```bash
-# If running using docker-compose, you can directly run the following command:
-docker-compose exec pool bash -c 'cat /var/lib/indy/pool_transactions_genesis' > pool_transactions_genesis
+This docker image exposes the logs of the nodes and the genesis files using a HTTP server on port 8000
 
-# Using docker:
-docker ps
-# Copy container id from previous command and substitute in <containerId> placeholder, same for <IDC_POOL_NAME> variable
-docker exec <containerId> bash -c 'cat /var/lib/indy/pool_transactions_genesis' > pool_transactions_genesis
+```bash
+curl <IDC_POOL_IP>:8000
 ```
 
 ## Added Trust Anchor NYM Transactions
 
-In this PoC we will skip the onboarding of Trust Anchors NYMs. Therefore 4 NYM transactions where added to the domain
-transactions genesis. Those DIDs where generated using the following seeds, so later on, any application can reproduce
-the DID keys and impersonate those parties.
+In this PoC we will skip the onboarding of Trust Anchors NYMs. Therefore, 4 NYM transactions where added to the domain
+transactions genesis. These DIDs where generated using seeds, so at any time the owners could regenerate them.
 
 * Government
     * Seed 0000000000000000000000Government
