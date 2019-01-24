@@ -66,10 +66,10 @@ docker-compose up -d
 
 ## Get generated pool transaction genesis file to be used by any agent willing to connect to it
 
-This docker image exposes the logs of the nodes and the genesis files using a HTTP server on port 8000
+This docker image exposes the logs of the nodes and the genesis files using a HTTP server on port 8001 (default)
 
 ```bash
-curl <IDC_POOL_IP>:8000
+curl <IDC_POOL_IP>:8001/pool_transactions_genesis
 ```
 
 ## Added Trust Anchor NYM Transactions

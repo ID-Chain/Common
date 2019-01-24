@@ -10,10 +10,10 @@ networks:
 
 services:
   pool:
-    image: idchain/test-pool:1.2
+    image: idchain/test-pool:1.4
     ports:
     - ${IDC_POOL_PORTS:-9701-9708}:${IDC_POOL_PORTS:-9701-9708}
-    - 8000:8000
+    - ${IDC_POOL_INFO_PORT-8001}:${IDC_POOL_INFO_PORT-8001}
     environment:
     - IDC_POOL_IP
     - IDC_POOL_NAME=${IDC_POOL_NAME:-sandbox}
