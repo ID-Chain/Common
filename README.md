@@ -33,8 +33,6 @@ pool transaction file. This identities were created using seed to make them repr
 
 Please see the [test-pool sub-README file] inside test-pool folder for more details.
 
-
-
 ## Publishing the docs
 
 > There is a Circle CI job which will automatically build and publish the documentation (master branch only)

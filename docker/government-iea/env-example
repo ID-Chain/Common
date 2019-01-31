@@ -1,0 +1,185 @@
+##
+##     ________  ________  _____    _____   __
+##    /  _/ __ \/ ____/ / / /   |  /  _/ | / /
+##    / // / / / /   / /_/ / /| |  / //  |/ /
+##  _/ // /_/ / /___/ __  / ___ |_/ // /|  /
+## /___/_____/\____/_/ /_/_/  |_/___/_/ |_/
+##
+## ----> Government
+##
+## Please copy this file into a new file with name .env,
+## and adjust the following variables to match your environment
+## ↓↓↓↓
+
+## ------------------------------------------------------------------------------------
+## Pool IP
+## Will be used to generate pool transaction genesis file
+## If there is a need to make it reachable from the outside,
+## please make sure it matches the PUBLIC IP of the machine
+##
+## If running in the Cloud, please run the script display-cloud-info.sh
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_POOL_IP=172.16.0.200
+
+## ------------------------------------------------------------------------------------
+## Genesis Transaction Genesis File Path & Static Info Port (test-pool only)
+##
+## Will be used by the IEA API to connect with the ledger
+##  If there is no file, will try to request the pool transaction genesis file
+##  using the static info port
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_GENESIS_TXN=./pool_transactions_genesis
+IDC_POOL_INFO_PORT=8001
+
+## ------------------------------------------------------------------------------------
+## API Host & Port
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_HOST=172.16.0.100
+IDC_API_PORT=8000
+
+## ------------------------------------------------------------------------------------
+## API Domain Details
+##
+## Protocol, host & port (Reachable by other agents)
+##  These values will be shared in the connection offer messages
+##  sent to connect with other agents
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_DOMAIN_PROTOCOL=http
+IDC_API_DOMAIN_HOST=172.16.0.100
+IDC_API_DOMAIN_PORT=8000
+
+## ------------------------------------------------------------------------------------
+## JSON Web Token Secret
+##
+## IMPORTANT!! Change it for any non dev/test environment
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_JWT_SECRET=your_jwt_secret
+
+
+## ------------------------------------------------------------------------------------
+## IEA API Logger level
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_LOG_LEVEL=debug
+
+
+## ------------------------------------------------------------------------------------
+## RUST logger level (low-level rust indy-sdk/libindy)
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+RUST_LOG=debug
+
+
+## ------------------------------------------------------------------------------------
+## IEA API Database Connection Parameters
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+# host and port at which the database is reachable
+IDC_API_DB_HOST=mongodb
+IDC_API_DB_PORT=27017
+# database user username and password
+IDC_API_DB_USER=
+IDC_API_DB_PASSWORD=
+
+
+## ------------------------------------------------------------------------------------
+## Schema Compiler & Checker API Connection Parameters
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_SCHEMA_IP=172.16.0.150
+IDC_SCHEMA_PORT=9000
+
+## ------------------------------------------------------------------------------------
+## Wallet Cache Time To Live (in minutes)
+##
+## Time to wait before closing a wallet after no request is using it anymore
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_WALLETCACHE_TTL=15
+
+
+## ------------------------------------------------------------------------------------
+## Flag to send all NYM transactions to the ledger (default false)
+##
+## This flag was used for experimentation purposes only
+##  by default pairwise dids are only stored locally and not stored on the ledger
+##  except when a role other than NONE is offered
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_NYM_ALWAYS=false
+
+
+## ------------------------------------------------------------------------------------
+## Bcrypt saltOrRounds configuration
+##
+## For more info see: https://kikobeats.com/storing-passwords-101/
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_SALTROUNDS=10
+
+
+## ------------------------------------------------------------------------------------
+## Deployment Parameters
+##
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_SUBNET=172.16.0.0/24
+IDC_POOL_PORTS=9701-9708
+IDC_PORT_START=9700
+
+## ------------------------------------------------------------------------------------
+## Government Host & Port
+## Required (no default values)
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+GOV_HOST=172.18.0.5
+GOV_PORT=8090
+
+## ------------------------------------------------------------------------------------
+## Government DID & Seed
+## Please see test-pool in (Common repository) for more information
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+GOV_DID=Th7MpTaRZVRYnPiabds81Y
+GOV_SEED=0000000000000000000000Government
+
+## ------------------------------------------------------------------------------------
+## Government IEA API User & Wallet parameters
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+GOV_USER=government
+GOV_PASSWORD=dummy
+GOV_WALLET=governmentWallet
+GOV_WALLET_KEY=dummy
+
+## ------------------------------------------------------------------------------------
+## Government Extra info used by mobile app (shared in connection offer messages)
+## Default values in NodeJS code (as defined here)
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+GOV_NAME=Government
+GOV_DESCRIPTION=Example Government
+GOV_LOGO_URL=http://23.97.243.176:8090/img/icons/android-chrome-512x512.png
+
+## ------------------------------------------------------------------------------------
+## Start Up delay (in milliseconds)
+## Used to introduce a delay before interacting with the IEA API
+## This interaction on bootstrap create:
+##  - User & Wallet
+##  - Schema (Passport)
+##  - Credential Definitions & Revocation Registries
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+GOV_START_UP_INTERVAL=5000
+
+## ------------------------------------------------------------------------------------
+## NGNIX Parameters
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+NGINX_HOST=172.16.0.105
+NGINX_PORT=80

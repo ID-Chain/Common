@@ -1,0 +1,36 @@
+##
+##     ________  ________  _____    _____   __
+##    /  _/ __ \/ ____/ / / /   |  /  _/ | / /
+##    / // / / / /   / /_/ / /| |  / //  |/ /
+##  _/ // /_/ / /___/ __  / ___ |_/ // /|  /
+## /___/_____/\____/_/ /_/_/  |_/___/_/ |_/
+##
+## ----> Chamber of Commerce
+## >> Simple configuration to run all components in a Virtual Machine
+##        (IEA API will connect to a remote test pool)
+##
+## Please copy this file into a new file with name .env,
+## and adjust the following variables to match your environment
+## ↓↓↓↓
+
+## ------------------------------------------------------------------------------------
+## Pool IP
+## Will be used to generate pool transaction genesis file
+## If there is a need to make it reachable from the outside,
+## please make sure it matches the PUBLIC IP of the machine
+##
+## If running in the Cloud, please run the script display-cloud-info.sh
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_POOL_IP=51.144.36.206
+
+## ------------------------------------------------------------------------------------
+## Genesis Transaction Genesis File Path & Static Info Port (test-pool only)
+##
+## Will be used by the IEA API to connect with the ledger
+##  If there is no file, will try to request the pool transaction genesis file
+##  using the static info port
+## ↓↓↓↓-------------------------------------------------------------------------------
+
+IDC_API_GENESIS_TXN=
+IDC_POOL_INFO_PORT=8001

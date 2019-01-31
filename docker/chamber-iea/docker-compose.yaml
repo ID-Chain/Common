@@ -1,0 +1,107 @@
+version: '3'
+
+networks:
+  indy-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${IDC_API_SUBNET-172.16.0.0/24}
+
+services:
+
+  legacy-chamber:
+    image: idchain/legacy-chamber:latest
+    container_name: cc-legacy
+    ports:
+      - ${CC_PORT-8091}:${CC_PORT-8091}
+    environment:
+      - IDC_API_HOST=${IDC_API_HOST-172.16.0.100}
+      - IDC_API_PORT=${IDC_API_PORT-8000}
+      - CC_HOST=172.16.0.102
+      - CC_PORT=${CC_PORT-8091}
+      - CC_DID=${CC_DID-BJqX84hzz2MEaDXNK4SLPK}
+      - CC_SEED=${CC_SEED-00000000000000000000000000000Kvk}
+      - CC_USER=${CC_USER-CC}
+      - CC_PASSWORD=${CC_PASSWORD-dummy}
+      - CC_WALLET=${CC_WALLET-CCWallet}
+      - CC_WALLET_KEY=${CC_WALLET_KEY-dummy}
+      - CC_NAME
+      - CC_DESCRIPTION
+      - CC_LOGO_URL
+      - CC_START_UP_INTERVAL=${CC_START_UP_INTERVAL-5000}
+      - CC_PROOF_TEMPLATE_NAME=ChamberOfCommerce-IdentityProof
+      - CC_TRUSTED_CRED_DEF_ID
+    networks:
+      indy-network:
+        ipv4_address: 172.16.0.102
+
+  mongodb:
+    image: mongo:4
+    command: --smallfiles
+    container_name: cc-mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${IDC_API_DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${IDC_API_DB_PASSWORD}
+    networks:
+      - indy-network
+
+  schema:
+    image: idchain/schema-extensions:1.0
+    container_name: cc-schema
+    environment:
+      - IDC_SCHEMA_IP=172.16.0.150
+      - IDC_SCHEMA_PORT=${IDC_SCHEMA_PORT-9000}
+    networks:
+      indy-network:
+        ipv4_address: 172.16.0.150
+
+  admin-ui:
+    image: idchain/admin-ui:latest
+    container_name: cc-admin
+    ports:
+      - 8080:${NGINX_PORT-80}
+    environment:
+      - NGINX_HOST=${NGINX_HOST-172.16.0.105}
+      - NGINX_PORT=${NGINX_PORT-80}
+      - IDC_API_DOMAIN_PROTOCOL=http
+      - IDC_API_DOMAIN_HOST=172.16.0.100
+      - IDC_API_DOMAIN_PORT=8000
+    depends_on:
+      - api
+    networks:
+      indy-network:
+        ipv4_address: ${NGINX_HOST-172.16.0.105}
+
+  api:
+    image: idchain/iea-api:latest
+    container_name: cc-api
+    environment:
+      - RUST_LOG=${RUST_LOG-debug}
+      - IDC_API_LOG_LEVEL=${IDC_API_LOG_LEVEL-debug}
+      - IDC_API_HOST=172.16.0.100
+      - IDC_API_PORT=${IDC_API_PORT-8000}
+      - IDC_API_DOMAIN_PROTOCOL
+      - IDC_API_DOMAIN_HOST
+      - IDC_API_DOMAIN_PORT
+      - IDC_API_NYM_ALWAYS=${IDC_API_NYM_ALWAYS-false}
+      - IDC_API_JWT_SECRET=${IDC_API_JWT_SECRET-changeme}
+      - IDC_API_DB_HOST=${IDC_API_DB_HOST-mongodb}
+      - IDC_API_DB_PORT=${IDC_API_DB_PORT-27017}
+      - IDC_API_DB_USER
+      - IDC_API_DB_PASSWORD
+      - IDC_API_SALTROUNDS=${IDC_API_SALTROUNDS-10}
+      - IDC_API_GENESIS_TXN=${IDC_API_GENESIS_TXN-./pool_transactions_genesis}
+      - IDC_POOL_IP=${IDC_POOL_IP-51.144.36.206}
+      - IDC_POOL_NAME=${IDC_POOL_NAME-testPool}
+      - IDC_POOL_INFO_PORT=8000
+      - IDC_SCHEMA_IP=172.16.0.150
+      - IDC_SCHEMA_PORT=${IDC_SCHEMA_PORT-9000}
+    ports:
+      - ${IDC_API_PORT-8000}:${IDC_API_PORT-8000}
+    depends_on:
+      - mongodb
+      - schema
+    networks:
+      indy-network:
+        ipv4_address: 172.16.0.100
