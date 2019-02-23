@@ -10,7 +10,7 @@ networks:
 
 services:
   legacy-government:
-    image: idchain/legacy-goverment:latest
+    image: idchain/legacy-government:latest
     container_name: gov-legacy
     ports:
       - ${GOV_PORT-8090}:${GOV_PORT-8090}
